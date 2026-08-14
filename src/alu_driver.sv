@@ -23,10 +23,10 @@ class alu_driver extends uvm_driver#(alu_trans);
 	
 	task run_phase(uvm_phase phase);
 	begin
-		@(vif.in_drv_cb);
+		/*@(vif.in_drv_cb);
 			m_cfg.vif.rst<=1'b1;
 		@(vif.in_drv_cb);
-			m_cfg.vif.rst<=1'b0;
+			m_cfg.vif.rst<=1'b0;*/
 
 		forever
 			begin
@@ -46,12 +46,10 @@ class alu_driver extends uvm_driver#(alu_trans);
 			vif.in_drv_cb.mode<=sig.mode;
 			vif.in_drv_cb.inp_valid<=sig.inp_valid;
 			vif.in_drv_cb.cmd<=sig.cmd;
-			if(sig.mode==1 &&( (sig.cmd==4'b0010) || (sig.cmd==4'b0011)))
-			begin
+			
 				vif.in_drv_cb.cin<=sig.cin;
-			end
-			else
-				vif.in_drv_cb.cin<=1'b0;
+			
+			
 
 		`uvm_info("DRIVER",$sformatf(" \nOPA=%d\n,OPB=%d\n,ce=%d\n,mode=%d\n,inp_valid=%d\n,cmd=%d\n,cin=%d\n",
 sig.opa,sig.opb,sig.ce,sig.mode,sig.inp_valid,sig.cmd,sig.cin),UVM_NONE)

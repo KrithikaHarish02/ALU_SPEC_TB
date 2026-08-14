@@ -14,12 +14,12 @@ class alu_trans extends uvm_sequence_item;
 			if(mode)
 				cmd<11;
 			else
-				cmd<13;
+				cmd<=13;
 	}
 
 	constraint cin_c {
-    		if(!(mode && (cmd inside {4'b0010,4'b0011})))
-        cin==0;
+    		if((mode && (cmd inside {4'b0010,4'b0011})))
+        cin==1;
 }
 
 	`uvm_object_utils_begin(alu_trans)

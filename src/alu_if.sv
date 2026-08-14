@@ -8,7 +8,7 @@ interface alu_if(input bit clk,input bit rst);
 	bit [`dw*2-1:0]res;
 	bit ce,mode,cin,cout,oflow,g,l,e,err;
 
-clocking in_drv_cb @(posedge clk);
+clocking in_drv_cb @(negedge clk);
 	default input #1 output #0;
 	output opa;
 	output opb;
@@ -18,7 +18,7 @@ clocking in_drv_cb @(posedge clk);
 endclocking
 
 clocking in_mon_cb@(posedge clk);
-	default input #1 output #0;
+	default input #0 output #0;
 	input opa;
 	input opb;
 	input inp_valid;
@@ -28,11 +28,7 @@ endclocking
 
 clocking out_mon_cb @(posedge clk);
 	default input #1 output #0;
-	input opa;
-	input opb;
-	input inp_valid;
-	input cmd;
-	input ce,mode,cin;
+	
 	input res;
 	input cout,oflow,g,l,e,err;
 endclocking

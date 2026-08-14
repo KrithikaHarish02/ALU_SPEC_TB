@@ -215,19 +215,19 @@ endfunction
             if(oprd1==oprd2)
              begin
                t.e=1'b1;
-               t.g=1'bz;
-               t.l=1'bz;
+               t.g=1'b0;
+               t.l=1'b0;
              end
             else if(oprd1>oprd2)
              begin
-               t.e=1'bz;
+               t.e=1'b0;
                t.g=1'b1;
-               t.l=1'bz;
+               t.l=1'b0;
              end
             else 
              begin
-               t.e=1'bz;
-               t.g=1'bz;
+               t.e=1'b0;
+               t.g=1'b0;
                t.l=1'b1;
              end
            end
@@ -282,43 +282,32 @@ endfunction
              4'b1001:t.res={1'b0,oprd1<<1};
 	     4'b1010:t.res={1'b0,oprd2>>1};      
              4'b1011:t.res={1'b0,oprd2<<1};      
-	     4'b1100:                        
-             begin 
-               if(oprd2[0])
-                 OPA_1 = {oprd1[6:0], oprd1[7]};
-               else
-                 OPA_1 = oprd1;
- 
-               if(oprd2[1])
-                 OPB_1 =  {OPA_1[5:0], OPA_1[7:6]}; 
-               else
-                 OPB_1= OPA_1;
- 
-               if(oprd2[2])
-                 t.res =  {OPB_1[3:0], OPB_1[7:4]} ;
-               else
-                 t.res = OPB_1;
- 
-               if(oprd2[4] | oprd2[5] | oprd2[6] | oprd2[7])
-                 t.err=1'b1;
-             end
+	     4'b1100:
+		begin
+			if(oprd2[7:4]!=0)
+			begin
+				t.err=1;
+				t.res=0;
+		end
+		else if(oprd2[2:0]==0)
+			t.res={1'b0,oprd1};
+		else
+			t.res={1'b0,(oprd1<<oprd2[2:0])|(oprd1>>(`dw-oprd2[2:0]))};
+		end
 
 	4'b1101:                       
              begin
-               if(oprd2[0])
-                 OPA_1 = {oprd1[0], oprd1[7:1]};
-               else
-                 OPA_1 = oprd1;
-               if(oprd2[1])
-                 OPB_1 =  {OPA_1[1:0], OPA_1[7:2]}; 
-               else
-                 OPB_1= OPA_1;
-               if(oprd2[2])
-                 t.res =  {OPB_1[3:0], OPB_1[7:4]} ;
-               else
-                 t.res = OPB_1;
-               if(oprd2[4] | oprd2[5] | oprd2[6] | oprd2[7])
-                 t.err=1'b1;
+               
+		if(oprd2[7:4]!=0)
+		begin
+			t.err=1;
+			t.res=0;
+		end
+		else if(oprd2[2:0]==0)
+			t.res={1'b0,oprd1};
+		else
+		t.res={1'b0,(oprd1>>oprd2[2:0])|(oprd1<<(`dw-oprd2[2:0]))};
+
              end
              default:    
                begin

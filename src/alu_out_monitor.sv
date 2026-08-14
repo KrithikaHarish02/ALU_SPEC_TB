@@ -24,23 +24,24 @@ class alu_out_monitor extends uvm_monitor;
 	endfunction
 
 	task run_phase(uvm_phase phase);
-		duv2mon=alu_trans::type_id::create("duv2mon");
-		repeat(2)@(vif.out_mon_cb);		
+		
+			
 		forever
 			begin
-				
+			@(vif.out_mon_cb);
+				duv2mon=alu_trans::type_id::create("duv2mon");
 				collect_data();
 				
-				`uvm_info("OUTPUT_MONITOR",$sformatf("\n OPA=%d\n,OPB=%d\n,CE=%d\n,INP_VALID=%d\n,MODE=%d\n,CMD=%d\n,CIN=%d\n,res=%d\n,err=%d\n,cout=%d\n,oflow=%d\n,l=%d\n",
-duv2mon.opa,duv2mon.opb,duv2mon.ce,duv2mon.inp_valid,duv2mon.mode,duv2mon.cmd,duv2mon.cin,
-duv2mon.res,duv2mon.err,duv2mon.cout,duv2mon.oflow,duv2mon.l),UVM_NONE)
+				`uvm_info("OUTPUT_MONITOR",$sformatf("\n ,res=%d\n,err=%d\n,cout=%d\n,oflow=%d\n,l=%d\n,g=%d\n,e=%d\n",
+
+duv2mon.res,duv2mon.err,duv2mon.cout,duv2mon.oflow,duv2mon.l,duv2mon.g,duv2mon.e),UVM_NONE)
 		end
 	endtask
 
 	virtual task collect_data();
 	begin
 		
-			@(vif.out_mon_cb);
+			
 				begin
 				
 	  			duv2mon.res=vif.out_mon_cb.res;
@@ -48,15 +49,12 @@ duv2mon.res,duv2mon.err,duv2mon.cout,duv2mon.oflow,duv2mon.l),UVM_NONE)
 	  			duv2mon.cout=vif.out_mon_cb.cout;
 	  			duv2mon.oflow=vif.out_mon_cb.oflow;
 	  			duv2mon.l = vif.out_mon_cb.l;
-	  			
-	  	  		duv2mon.ce        =   vif.out_mon_cb.ce; 
-	  			duv2mon.inp_valid =   vif.out_mon_cb.inp_valid;
-	  	  		duv2mon.opa        =   vif.out_mon_cb.opa;
-	  	  		duv2mon.opb       =   vif.out_mon_cb.opb;
-          	  		duv2mon.mode      =   vif.out_mon_cb.mode;
-	  	  		duv2mon.cmd       =   vif.out_mon_cb.cmd;
+	  			duv2mon.g = vif.out_mon_cb.g;
+				duv2mon.e = vif.out_mon_cb.e;
+	  	  		
           
 				if((duv2mon.mode==1) && ((duv2mon.cmd==4'b1001) || (duv2mon.cmd==4'b1010)))
+				repeat(3)
 	  			begin
 	    				@(vif.out_mon_cb);
 						duv2mon.res=vif.out_mon_cb.res;

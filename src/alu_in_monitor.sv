@@ -25,9 +25,9 @@ class alu_in_monitor extends uvm_monitor;
 	task run_phase(uvm_phase phase);
 	begin
 		drv2mon=alu_trans::type_id::create("drv2mon");
-		repeat(2)@(vif.in_mon_cb);			
+					
 		forever begin
-		
+		@(vif.in_mon_cb);
 			collect_input_monitor();
 
 			`uvm_info("INPUT_MONITOR",$sformatf("\n OPA=%d\n,OPB=%d\n,CE=%d\n,INP_VALID=%d\n,MODE=%d\n,CMD=%d\n,CIN=%d,\n",
@@ -39,7 +39,7 @@ drv2mon.opa,drv2mon.opb,drv2mon.ce,drv2mon.inp_valid,drv2mon.mode,drv2mon.cmd,dr
 	virtual task collect_input_monitor();
 	   begin
 		
-		@(vif.in_mon_cb);
+		
 		drv2mon=alu_trans::type_id::create("drv2mon");		
 		drv2mon.ce=vif.in_mon_cb.ce;
 		drv2mon.opa=vif.in_mon_cb.opa;
@@ -47,10 +47,9 @@ drv2mon.opa,drv2mon.opb,drv2mon.ce,drv2mon.inp_valid,drv2mon.mode,drv2mon.cmd,dr
 		drv2mon.inp_valid=vif.in_mon_cb.inp_valid;
 		drv2mon.mode=vif.in_mon_cb.mode;
 		drv2mon.cmd=vif.in_mon_cb.cmd;
-		if((drv2mon.mode==1) && ((drv2mon.cmd==4'b0010) || (drv2mon.cmd==4'b0011)))
-	   	begin
+		
 			drv2mon.cin =vif.in_mon_cb.cin;
-	     	end
+	     	
 		inp_monitor_port.write(drv2mon);
 	    end
 	//@(vif.in_mon_cb);

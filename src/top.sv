@@ -17,12 +17,12 @@
 		.CIN(DUV_IF.cin),.CMD(DUV_IF.cmd),.INP_VALID(DUV_IF.inp_valid),.RES(DUV_IF.res),.COUT(DUV_IF.cout),
 		.OFLOW(DUV_IF.oflow),.G(DUV_IF.g),.E(DUV_IF.e),.L(DUV_IF.l),.ERR(DUV_IF.err));
 
-	/*initial 
+	initial 
 	begin
 		rst=1;
 		#10;
 		rst=0;
-	end*/
+	end
 
 
  	initial
